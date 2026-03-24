@@ -5,6 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.scraptreasure.dto.AuthResponse;
 import  com.scraptreasure.dto.LoginRequest;
 import  com.scraptreasure.dto.RegisterRequest;
 import  com.scraptreasure.entity.User;
@@ -44,17 +45,22 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public String login(LoginRequest request) {
+  public AuthResponse login(LoginRequest request) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+    User user = userRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return jwtUtil.generateToken(request.getEmail());
+    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        throw new RuntimeException("Invalid credentials");
     }
+
+    String token = jwtService.generateToken(user);
+
+    return AuthResponse.builder()
+            .token(token)
+            .role(user.getRole().name()) 
+            .build();
+}
 }
 
 
