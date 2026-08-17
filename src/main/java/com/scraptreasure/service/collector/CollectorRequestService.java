@@ -18,7 +18,7 @@ public class CollectorRequestService {
         private final ScrapRequestRepository scrapRequestRepository;
         private final UserRepository userRepository;
 
-        // ✅ ACCEPT REQUEST
+       
         public ScrapRequest acceptRequest(Long requestId, String collectorEmail) {
 
                 User collector = userRepository.findByEmail(collectorEmail)

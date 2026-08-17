@@ -43,7 +43,7 @@ else {
 
     if (req.status && req.status.toUpperCase() === "ACCEPTED") {
         weight = `<span style="color:#1565c0; font-weight:600;">🚚 Pickup scheduled</span>`;
-        price = `<span style="color:#616161;">Price will updated at client side</span>`;
+        price = `<span style="color:#616161;">Price will updated at collector side</span>`;
     }
 
     if (req.status && req.status.toUpperCase() === "COMPLETED") {
